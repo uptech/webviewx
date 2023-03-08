@@ -1,5 +1,5 @@
-import 'package:webviewx/src/utils/utils.dart';
 import 'package:webviewx/src/controller/interface.dart';
+import 'package:webviewx/src/utils/utils.dart';
 
 /// Interface for widget
 abstract class WebViewX {
@@ -65,7 +65,7 @@ abstract class WebViewX {
   final NavigationDelegate? navigationDelegate;
 
   /// Callback for when something goes wrong in while page or resources load.
-  final void Function(WebResourceError error)? onWebResourceError;
+  final void Function(WebxResourceError error)? onWebResourceError;
 
   /// Parameters specific to the web version.
   /// This may eventually be merged with [mobileSpecificParams],

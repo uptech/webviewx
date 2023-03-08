@@ -1,19 +1,19 @@
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:js' as js;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-
-import 'package:webviewx/src/utils/dart_ui_fix.dart' as ui;
-import 'package:webviewx/src/utils/constants.dart';
-import 'package:webviewx/src/utils/logger.dart';
-import 'package:webviewx/src/utils/utils.dart';
 import 'package:webviewx/src/controller/impl/web.dart';
 import 'package:webviewx/src/controller/interface.dart' as ctrl_interface;
+import 'package:webviewx/src/utils/constants.dart';
+import 'package:webviewx/src/utils/dart_ui_fix.dart' as ui;
+import 'package:webviewx/src/utils/logger.dart';
+import 'package:webviewx/src/utils/utils.dart';
 import 'package:webviewx/src/view/interface.dart' as view_interface;
 
 /// Web implementation
@@ -96,7 +96,7 @@ class WebViewX extends StatefulWidget implements view_interface.WebViewX {
 
   /// Callback for when something goes wrong in while page or resources load.
   @override
-  final void Function(WebResourceError error)? onWebResourceError;
+  final void Function(WebxResourceError error)? onWebResourceError;
 
   /// Parameters specific to the web version.
   /// This may eventually be merged with [mobileSpecificParams],
@@ -112,7 +112,7 @@ class WebViewX extends StatefulWidget implements view_interface.WebViewX {
 
   /// Constructor
   const WebViewX({
-    Key? key,
+    super.key,
     this.initialContent = 'about:blank',
     this.initialSourceType = SourceType.url,
     this.userAgent,
@@ -131,13 +131,13 @@ class WebViewX extends StatefulWidget implements view_interface.WebViewX {
     this.onWebResourceError,
     this.webSpecificParams = const WebSpecificParams(),
     this.mobileSpecificParams = const MobileSpecificParams(),
-  }) : super(key: key);
+  });
 
   @override
-  _WebViewXState createState() => _WebViewXState();
+  WebViewXState createState() => WebViewXState();
 }
 
-class _WebViewXState extends State<WebViewX> {
+class WebViewXState extends State<WebViewX> {
   late html.IFrameElement iframe;
   late String iframeViewType;
   late StreamSubscription iframeOnLoadSubscription;
@@ -460,7 +460,9 @@ class _WebViewXState extends State<WebViewX> {
     _debugLog(dartObj.toString());
 
     if (!await _checkNavigationAllowed(
-        href, webViewXController.value.sourceType)) {
+      href,
+      webViewXController.value.sourceType,
+    )) {
       _debugLog('Navigation not allowed for source:\n$href\n');
       return;
     }
@@ -510,22 +512,26 @@ class _WebViewXState extends State<WebViewX> {
     ).then((source) {
       _setPageSourceAfterBypass(url, source);
 
-      webViewXController.webRegisterNewHistoryEntry(WebViewContent(
-        source: url,
-        sourceType: SourceType.urlBypass,
-        headers: headers,
-        webPostRequestBody: body,
-      ));
+      webViewXController.webRegisterNewHistoryEntry(
+        WebViewContent(
+          source: url,
+          sourceType: SourceType.urlBypass,
+          headers: headers,
+          webPostRequestBody: body,
+        ),
+      );
 
       _debugLog('Got a new history entry: $url\n');
     }).catchError((e) {
-      widget.onWebResourceError?.call(WebResourceError(
-        description: 'Failed to fetch the page at $url\nError:\n$e\n',
-        errorCode: WebResourceErrorType.connect.index,
-        errorType: WebResourceErrorType.connect,
-        domain: Uri.parse(url).authority,
-        failingUrl: url,
-      ));
+      widget.onWebResourceError?.call(
+        WebxResourceError(
+          description: 'Failed to fetch the page at $url\nError:\n$e\n',
+          errorCode: WebResourceErrorType.connect.index,
+          errorType: WebResourceErrorType.connect,
+          domain: Uri.parse(url).authority,
+          failingUrl: url,
+        ),
+      );
       _debugLog('Failed to fetch the page at $url\nError:\n$e\n');
     });
   }
