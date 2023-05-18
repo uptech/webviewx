@@ -37,11 +37,11 @@ class WebViewX extends StatefulWidget implements view_interface.WebViewX {
 
   /// Widget width
   @override
-  final double width;
+  final double? width;
 
   /// Widget height
   @override
-  final double height;
+  final double? height;
 
   /// Callback which returns a referrence to the [WebViewXController]
   /// being created.
@@ -116,8 +116,8 @@ class WebViewX extends StatefulWidget implements view_interface.WebViewX {
     this.initialContent = 'about:blank',
     this.initialSourceType = SourceType.url,
     this.userAgent,
-    required this.width,
-    required this.height,
+    this.width,
+    this.height,
     this.onWebViewCreated,
     this.jsContent = const {},
     this.dartCallBacks = const {},
@@ -348,8 +348,8 @@ class WebViewXState extends State<WebViewX> {
       ..id = 'id_$iframeViewType'
       ..name = 'name_$iframeViewType'
       ..style.border = 'none'
-      ..width = widget.width.toInt().toString()
-      ..height = widget.height.toInt().toString()
+      ..width = widget.width?.toInt().toString()
+      ..height = widget.height?.toInt().toString()
       ..allowFullscreen = widget.webSpecificParams.webAllowFullscreenContent;
 
     widget.webSpecificParams.additionalSandboxOptions.forEach(
