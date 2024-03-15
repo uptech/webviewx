@@ -423,7 +423,6 @@ class WebViewXState extends State<WebViewX> {
           windowDisambiguator: iframeViewType,
           forWeb: true,
         );
-        break;
       case SourceType.url:
       case SourceType.urlBypass:
         if (source == 'about:blank') {
@@ -450,7 +449,6 @@ class WebViewXState extends State<WebViewX> {
             headers: model.headers,
           );
         }
-        break;
     }
   }
 

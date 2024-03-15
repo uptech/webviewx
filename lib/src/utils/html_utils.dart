@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 import 'package:webviewx/src/utils/constants.dart';
@@ -243,7 +244,7 @@ class HtmlUtils {
     return embedJsInHtmlSource(
       source,
       {
-        'parent.$jsToDartConnectorFN$windowDisambiguator && parent.$jsToDartConnectorFN$windowDisambiguator(window)'
+        'parent.$jsToDartConnectorFN$windowDisambiguator && parent.$jsToDartConnectorFN$windowDisambiguator(window)',
       },
       position: EmbedPosition.aboveHeadCloseTag,
     );
